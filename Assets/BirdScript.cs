@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class BirdScript : MonoBehaviour{
 
+
+    // This is a change to github. 
+    
     //We need to create a rigidbody2d so we can talk to it in the inspecter.
     public Rigidbody2D myrigidbody2d;
     public LogicScript logic;
