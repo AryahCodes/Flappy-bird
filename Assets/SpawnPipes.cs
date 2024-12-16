@@ -1,9 +1,12 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class SpawnPipes : MonoBehaviour{
 
     //We need to use th prefab pipes and that is an gameobject now.
     public GameObject pipe;
+
+    public LogicScript logic;
 
     //Timer and the spawnRate.
     //Inspector can change the spawn rate.
@@ -14,9 +17,14 @@ public class SpawnPipes : MonoBehaviour{
     //We need a float so we can offset the Y position of the spawner.
     public float offSet = 5;
 
+    private List<GameObject> spawnedPipes = new List<GameObject>(); // List to track spawned pipes
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start(){
         spawnPipe();
+        logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
+
     }
 
     // Update is called once per frame
@@ -30,6 +38,22 @@ public class SpawnPipes : MonoBehaviour{
         //We need to make it so there is a timer and it spawns in at that timer.
         //We need to make it so that timer ticks for every frame until it hits the spawnRate then make it back to 0;
         //We use Time.deltaTime since everyones frame rate is different and so deltaTime makes it constant.
+
+        if (logic.isGameOver)
+        {
+            // Stop the movement of all pipes when the game is over
+            foreach (GameObject spawnedPipe in spawnedPipes)
+            {
+                PipeScriptMove pipeScript = spawnedPipe.GetComponent<PipeScriptMove>();
+                if (pipeScript != null)
+                {
+                    pipeScript.StopMovement();
+                }
+            }
+            return; // Stop spawning new pipes
+        }
+
+
         if(timer < spawnRate){
             timer += Time.deltaTime;
         }else{
@@ -54,6 +78,7 @@ public class SpawnPipes : MonoBehaviour{
         //Now we need a new vector with 3 demenstions and make the Y different from the spawner.
         Vector3 vec = new Vector3(transform.position.x, height, transform.position.z);
 
-        Instantiate(pipe, vec, transform.rotation);
+        GameObject newPipe = Instantiate(pipe, vec, transform.rotation);
+        spawnedPipes.Add(newPipe); // Add the new pipe to the list of spawned pipes
     }
 }

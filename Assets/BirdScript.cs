@@ -11,8 +11,7 @@ public class BirdScript : MonoBehaviour{
     //We need to create a rigidbody2d so we can talk to it in the inspecter.
     public Rigidbody2D myrigidbody2d;
     public LogicScript logic;
-    public bool birdIsAlive = true;
-    
+    public bool birdIsAlive = true;    
     //When we make this float variable we can see this in unity and change it from there so we don't have 
     //to come back here everytime.
     public float flapHeight;
@@ -49,7 +48,16 @@ public class BirdScript : MonoBehaviour{
 
     }
     private void OnCollisionEnter2D(Collision2D collision){
+            GameObject pipeParent = collision.transform.parent.gameObject;
+            PipeScriptMove pipeScript = pipeParent.GetComponent<PipeScriptMove>();
+            Debug.Log("Collision detected with: " + collision.gameObject.name);
+
+            if(pipeScript != null){
+                pipeScript.StopMovement();
+                Debug.Log("Pipe hit! Stopping movement.");
+            }
             logic.gameOver();
             birdIsAlive = false;
+
     }
 }

@@ -10,10 +10,13 @@ public class PipeScriptMove : MonoBehaviour
     //Create a variable for the deadzone.
     public float deadZone = -11;
 
+    private bool gameOver = false;
+    public LogicScript logic;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
     }
 
     // Update is called once per frame
@@ -27,13 +30,26 @@ public class PipeScriptMove : MonoBehaviour
         //This updates the movement at every frame which is BAD.
         //If some pcs are faster then it will move faster. We can't allow that. So we need to multiply everything by 
         //a constant speed which is the deltatime.
-        transform.position = transform.position + (Vector3.left * moveSpeed) * Time.deltaTime;
-
+        
+        // Only move the pipes if the game is not over
+        if (!gameOver)
+        {
+            // Move the pipes left with a constant speed
+            transform.position = transform.position + (Vector3.left * moveSpeed) * Time.deltaTime;
+        }
+        
         //Now if the pipe goes out of frame this object will be destroyed.s
         if(transform.position.x < deadZone){
 
             //The Destroy lets us easily destroy the object thats running this.    
             Destroy(gameObject);
         }
+    }
+
+    public void StopMovement()
+    {
+        gameOver = true;
+        Debug.Log("Game over. Stopping pipe movement.");
+
     }
 }

@@ -9,6 +9,9 @@ public class LogicScript : MonoBehaviour
     public Text scoreText;
     public GameObject gameOverScreen;
 
+    public bool isGameOver = false; 
+
+
     //Make it public so other classes can use this method;
     public void addScore(int scoreToadd){
         score += scoreToadd;
@@ -21,6 +24,7 @@ public class LogicScript : MonoBehaviour
 
     public void gameOver(){
         gameOverScreen.SetActive(true);
+        isGameOver = true;
     }
 
 }
