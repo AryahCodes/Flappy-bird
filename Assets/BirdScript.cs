@@ -3,6 +3,9 @@ using UnityEngine;
 public class BirdScript : MonoBehaviour{
 
 
+    private float deadsZone = -7;
+
+
     // This is a change to github. 
     
     //We need to create a rigidbody2d so we can talk to it in the inspecter.
@@ -35,6 +38,15 @@ public class BirdScript : MonoBehaviour{
         if(Input.GetKeyDown(KeyCode.Space) && birdIsAlive){
             myrigidbody2d.linearVelocity = Vector2.up * flapHeight;
         }
+
+        if(transform.position.y < deadsZone){
+
+            //The Destroy lets us easily destroy the object thats running this.    
+            Destroy(gameObject);
+            logic.gameOver();
+            birdIsAlive = false;
+        }
+
     }
     private void OnCollisionEnter2D(Collision2D collision){
             logic.gameOver();
